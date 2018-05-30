@@ -38,7 +38,7 @@
     command: 'cat ./configs/{{inventory_hostname}}_FWRemove.cfg'
     register: FWRemove
 
-    - name: get file content FWACL
+  - name: get file content FWACL
     command: 'cat ./configs/{{inventory_hostname}}_FWACL.cfg'
     register: FWACL
 

@@ -1,5 +1,15 @@
-[GNS3]
+[Routers]
 R1 ansible_ssh_host=192.168.101.11 
 R2 ansible_ssh_host=192.168.101.12
-#R3 ansible_ssh_host=10.1.1.3
+R3 ansible_ssh_host=10.1.1.3
 
+[Switches]
+SW1 ansible_ssh_host=192.168.101.91
+SW2 ansible_ssh_host=192.168.101.92
+
+[Firewalls]
+#ASA1 ansible_ssh_host=192.168.1.1
+ASA2 ansible_ssh_host=192.168.101.62
+#ASA3 ansible_ssh_host=192.168.101.63
+#ASA4 ansible_ssh_host=192.168.101.64
+#ASA5 ansible_ssh_host=192.168.101.65

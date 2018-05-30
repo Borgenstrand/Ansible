@@ -26,10 +26,10 @@
       src: "./ASAJinja.j2"
       dest: "./configs/{{inventory_hostname}}.cfg"
 
-#  - name: Pushing the configs created using JinjaAndYAML
-#    ASA_config:
-#      src: "./configs/{{inventory_hostname}}.cfg"
-#      provider: "{{ connection }}"
+  - name: Pushing the configs created using JinjaAndYAML
+    asa_config:
+      src: "./configs/{{inventory_hostname}}.cfg"
+      provider: "{{ connection }}"
 
 
 

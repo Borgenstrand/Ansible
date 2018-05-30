@@ -29,11 +29,8 @@ crypto ipsec security-association lifetime seconds 86400
 crypto ipsec security-association pmtu-aging infinite
 
 
-
-
 access-list SITETOSITEACLASA2toASA5 extended permit ip 192.168.2.0 255.255.255.0 192.168.5.0 255.255.255.0 
 access-list SITETOSITEACLASA2toASA5 extended deny ip any any 
-
 
 route outside 192.168.5.0 255.255.255.0 192.168.101.65 1 
 
@@ -44,19 +41,13 @@ crypto map S2SVPN 25 set peer 192.168.101.65
 crypto map S2SVPN 25 set ikev1 transform-set SITETOSITEASA2toASA5
 crypto map S2SVPN interface outside
 
-
 tunnel-group 192.168.101.65 type ipsec-l2l
 tunnel-group 192.168.101.65 ipsec-attributes
  ikev1 pre-shared-key cisco123
 
 
-
-
-
-
 access-list SITETOSITEACLASA2toASA4 extended permit ip 192.168.2.0 255.255.255.0 192.168.4.0 255.255.255.0 
 access-list SITETOSITEACLASA2toASA4 extended deny ip any any 
-
 
 route outside 192.168.4.0 255.255.255.0 192.168.101.64 1 
 
@@ -67,19 +58,13 @@ crypto map S2SVPN 24 set peer 192.168.101.64
 crypto map S2SVPN 24 set ikev1 transform-set SITETOSITEASA2toASA4
 crypto map S2SVPN interface outside
 
-
 tunnel-group 192.168.101.64 type ipsec-l2l
 tunnel-group 192.168.101.64 ipsec-attributes
  ikev1 pre-shared-key cisco123
 
 
-
-
-
-
 access-list SITETOSITEACLASA2toASA3 extended permit ip 192.168.2.0 255.255.255.0 192.168.3.0 255.255.255.0 
 access-list SITETOSITEACLASA2toASA3 extended deny ip any any 
-
 
 route outside 192.168.3.0 255.255.255.0 192.168.101.63 1 
 
@@ -90,19 +75,13 @@ crypto map S2SVPN 23 set peer 192.168.101.63
 crypto map S2SVPN 23 set ikev1 transform-set SITETOSITEASA2toASA3
 crypto map S2SVPN interface outside
 
-
 tunnel-group 192.168.101.63 type ipsec-l2l
 tunnel-group 192.168.101.63 ipsec-attributes
  ikev1 pre-shared-key cisco123
 
 
-
-
-
-
 access-list SITETOSITEACLASA2toASA1 extended permit ip 192.168.2.0 255.255.255.0 192.168.1.0 255.255.255.0 
 access-list SITETOSITEACLASA2toASA1 extended deny ip any any 
-
 
 route outside 192.168.1.0 255.255.255.0 192.168.101.61 1 
 
@@ -113,12 +92,9 @@ crypto map S2SVPN 21 set peer 192.168.101.61
 crypto map S2SVPN 21 set ikev1 transform-set SITETOSITEASA2toASA1
 crypto map S2SVPN interface outside
 
-
 tunnel-group 192.168.101.61 type ipsec-l2l
 tunnel-group 192.168.101.61 ipsec-attributes
  ikev1 pre-shared-key cisco123
-
-
 
  
 
