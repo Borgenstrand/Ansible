@@ -1,0 +1,5 @@
+[GNS3]
+R1 ansible_ssh_host=192.168.101.11 
+R2 ansible_ssh_host=192.168.101.12
+#R3 ansible_ssh_host=10.1.1.3
+

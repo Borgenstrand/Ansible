@@ -1,0 +1,465 @@
+Ansible 1 ASA:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleASAWithInspection$ time ansible-playbook ASAFirewallOpening.yml
+
+PLAY [Firewalls] ***************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [ASA1]
+
+TASK [Generate removal of old Object and Deny statement for each device] *******
+ok: [ASA1]
+
+TASK [Generate new of Object and Deny statement for each device] ***************
+changed: [ASA1]
+
+TASK [Generate the ACLs] *******************************************************
+ok: [ASA1]
+
+TASK [get file content FWObject] ***********************************************
+changed: [ASA1]
+
+TASK [get file content FWRemove] ***********************************************
+changed: [ASA1]
+
+TASK [get file content FWACL] **************************************************
+changed: [ASA1]
+
+TASK [Clearing the old] ********************************************************
+changed: [ASA1] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=no object-group service DenyObjectAnsible_1)
+
+TASK [Pushing the new object and deny statement created using JinjaAndYAML] ****
+changed: [ASA1] => (item=service udp destination eq 722)
+changed: [ASA1] => (item=service tcp destination eq 811)
+
+TASK [Pushing the new ACL] *****************************************************
+changed: [ASA1] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA1] => (item=access-group ACLAnsible1 in interface inside )
+
+PLAY RECAP *********************************************************************
+ASA1                       : ok=10   changed=7    unreachable=0    failed=0   
+
+
+real	0m19.611s
+user	0m11.820s
+sys	0m1.497s
+
+
+Ansible 2 ASA:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleASAWithInspection$ time ansible-playbook ASAFirewallOpening.yml
+
+PLAY [Firewalls] ***************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [ASA1]
+ok: [ASA2]
+
+TASK [Generate removal of old Object and Deny statement for each device] *******
+ok: [ASA2]
+ok: [ASA1]
+
+TASK [Generate new of Object and Deny statement for each device] ***************
+ok: [ASA1]
+ok: [ASA2]
+
+TASK [Generate the ACLs] *******************************************************
+ok: [ASA1]
+ok: [ASA2]
+
+TASK [get file content FWObject] ***********************************************
+changed: [ASA2]
+changed: [ASA1]
+
+TASK [get file content FWRemove] ***********************************************
+changed: [ASA1]
+changed: [ASA2]
+
+TASK [get file content FWACL] **************************************************
+changed: [ASA1]
+changed: [ASA2]
+
+TASK [Clearing the old] ********************************************************
+changed: [ASA1] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA2] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=no object-group service DenyObjectAnsible_1)
+
+TASK [Pushing the new object and deny statement created using JinjaAndYAML] ****
+changed: [ASA1] => (item=service udp destination eq 722)
+changed: [ASA1] => (item=service tcp destination eq 811)
+changed: [ASA2] => (item=service udp destination eq 722)
+changed: [ASA2] => (item=service tcp destination eq 811)
+
+TASK [Pushing the new ACL] *****************************************************
+changed: [ASA1] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA1] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA2] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA2] => (item=access-group ACLAnsible1 in interface inside )
+
+PLAY RECAP *********************************************************************
+ASA1                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA2                       : ok=10   changed=6    unreachable=0    failed=0   
+
+
+real	0m49.990s
+user	0m23.799s
+sys	0m3.547s
+
+
+Ansible 3 ASA:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleASAWithInspection$ time ansible-playbook ASAFirewallOpening.yml
+
+PLAY [Firewalls] ***************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [ASA1]
+ok: [ASA2]
+ok: [ASA3]
+
+TASK [Generate removal of old Object and Deny statement for each device] *******
+ok: [ASA2]
+ok: [ASA1]
+ok: [ASA3]
+
+TASK [Generate new of Object and Deny statement for each device] ***************
+ok: [ASA1]
+ok: [ASA2]
+ok: [ASA3]
+
+TASK [Generate the ACLs] *******************************************************
+ok: [ASA2]
+ok: [ASA3]
+ok: [ASA1]
+
+TASK [get file content FWObject] ***********************************************
+changed: [ASA3]
+changed: [ASA1]
+changed: [ASA2]
+
+TASK [get file content FWRemove] ***********************************************
+changed: [ASA2]
+changed: [ASA1]
+changed: [ASA3]
+
+TASK [get file content FWACL] **************************************************
+changed: [ASA2]
+changed: [ASA1]
+changed: [ASA3]
+
+TASK [Clearing the old] ********************************************************
+changed: [ASA1] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA2] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA3] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA3] => (item=no object-group service DenyObjectAnsible_1)
+
+TASK [Pushing the new object and deny statement created using JinjaAndYAML] ****
+changed: [ASA1] => (item=service udp destination eq 722)
+changed: [ASA1] => (item=service tcp destination eq 811)
+changed: [ASA2] => (item=service udp destination eq 722)
+changed: [ASA3] => (item=service udp destination eq 722)
+changed: [ASA2] => (item=service tcp destination eq 811)
+changed: [ASA3] => (item=service tcp destination eq 811)
+
+TASK [Pushing the new ACL] *****************************************************
+changed: [ASA1] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA3] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+ok: [ASA1] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA3] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA2] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA3] => (item=access-group ACLAnsible1 in interface inside )
+ok: [ASA2] => (item=access-group ACLAnsible1 in interface inside )
+
+PLAY RECAP *********************************************************************
+ASA1                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA2                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA3                       : ok=10   changed=6    unreachable=0    failed=0   
+
+
+real	1m2.935s
+user	0m39.251s
+sys	0m5.347s
+
+
+Ansible 4 ASA:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleASAWithInspection$ time ansible-playbook ASAFirewallOpening.yml
+
+PLAY [Firewalls] ***************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [ASA1]
+ok: [ASA2]
+ok: [ASA3]
+ok: [ASA4]
+
+TASK [Generate removal of old Object and Deny statement for each device] *******
+ok: [ASA2]
+ok: [ASA1]
+ok: [ASA3]
+ok: [ASA4]
+
+TASK [Generate new of Object and Deny statement for each device] ***************
+ok: [ASA3]
+ok: [ASA1]
+ok: [ASA4]
+ok: [ASA2]
+
+TASK [Generate the ACLs] *******************************************************
+ok: [ASA2]
+ok: [ASA1]
+ok: [ASA3]
+ok: [ASA4]
+
+TASK [get file content FWObject] ***********************************************
+changed: [ASA3]
+changed: [ASA4]
+changed: [ASA1]
+changed: [ASA2]
+
+TASK [get file content FWRemove] ***********************************************
+changed: [ASA1]
+changed: [ASA2]
+changed: [ASA3]
+changed: [ASA4]
+
+TASK [get file content FWACL] **************************************************
+changed: [ASA1]
+changed: [ASA2]
+changed: [ASA3]
+changed: [ASA4]
+
+TASK [Clearing the old] ********************************************************
+changed: [ASA1] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA2] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA3] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA4] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA3] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA4] => (item=no object-group service DenyObjectAnsible_1)
+
+TASK [Pushing the new object and deny statement created using JinjaAndYAML] ****
+changed: [ASA1] => (item=service udp destination eq 722)
+changed: [ASA1] => (item=service tcp destination eq 811)
+changed: [ASA3] => (item=service udp destination eq 722)
+changed: [ASA2] => (item=service udp destination eq 722)
+changed: [ASA4] => (item=service udp destination eq 722)
+changed: [ASA3] => (item=service tcp destination eq 811)
+changed: [ASA4] => (item=service tcp destination eq 811)
+changed: [ASA2] => (item=service tcp destination eq 811)
+
+TASK [Pushing the new ACL] *****************************************************
+changed: [ASA1] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA3] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA4] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+ok: [ASA1] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA2] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA4] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA3] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+failed: [ASA2] (item=access-list ACLAnsible1 line 999 extended permit ip any any) => {"changed": false, "item": "access-list ACLAnsible1 line 999 extended permit ip any any", "msg": "timeout waiting for command to complete"}
+ok: [ASA4] => (item=access-group ACLAnsible1 in interface inside )
+ok: [ASA3] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA2] => (item=access-group ACLAnsible1 in interface inside )
+	to retry, use: --limit @/home/markus/Desktop/AnsibleProject/AnsibleASAWithInspection/ASAFirewallOpening.retry
+
+PLAY RECAP *********************************************************************
+ASA1                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA2                       : ok=9    changed=5    unreachable=0    failed=1   
+ASA3                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA4                       : ok=10   changed=6    unreachable=0    failed=0   
+
+
+real	1m7.872s
+user	0m56.903s
+sys	0m7.858s
+
+
+Ansible 5 ASA:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleASAWithInspection$ time ansible-playbook ASAFirewallOpening.yml
+
+PLAY [Firewalls] ***************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [ASA1]
+ok: [ASA2]
+ok: [ASA3]
+ok: [ASA4]
+ok: [ASA5]
+
+TASK [Generate removal of old Object and Deny statement for each device] *******
+ok: [ASA2]
+ok: [ASA3]
+ok: [ASA1]
+ok: [ASA4]
+ok: [ASA5]
+
+TASK [Generate new of Object and Deny statement for each device] ***************
+ok: [ASA1]
+ok: [ASA2]
+ok: [ASA4]
+ok: [ASA3]
+ok: [ASA5]
+
+TASK [Generate the ACLs] *******************************************************
+ok: [ASA1]
+ok: [ASA3]
+ok: [ASA5]
+ok: [ASA4]
+ok: [ASA2]
+
+TASK [get file content FWObject] ***********************************************
+changed: [ASA3]
+changed: [ASA4]
+changed: [ASA1]
+changed: [ASA2]
+changed: [ASA5]
+
+TASK [get file content FWRemove] ***********************************************
+changed: [ASA1]
+changed: [ASA5]
+changed: [ASA3]
+changed: [ASA2]
+changed: [ASA4]
+
+TASK [get file content FWACL] **************************************************
+changed: [ASA1]
+changed: [ASA3]
+changed: [ASA4]
+changed: [ASA2]
+changed: [ASA5]
+
+TASK [Clearing the old] ********************************************************
+changed: [ASA1] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA3] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA5] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA4] => (item=no access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA4] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA5] => (item=no object-group service DenyObjectAnsible_1)
+changed: [ASA3] => (item=no object-group service DenyObjectAnsible_1)
+
+TASK [Pushing the new object and deny statement created using JinjaAndYAML] ****
+changed: [ASA1] => (item=service udp destination eq 722)
+changed: [ASA1] => (item=service tcp destination eq 811)
+changed: [ASA3] => (item=service udp destination eq 722)
+changed: [ASA2] => (item=service udp destination eq 722)
+changed: [ASA5] => (item=service udp destination eq 722)
+changed: [ASA4] => (item=service udp destination eq 722)
+changed: [ASA3] => (item=service tcp destination eq 811)
+changed: [ASA2] => (item=service tcp destination eq 811)
+changed: [ASA4] => (item=service tcp destination eq 811)
+changed: [ASA5] => (item=service tcp destination eq 811)
+
+TASK [Pushing the new ACL] *****************************************************
+changed: [ASA1] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA1] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA4] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA5] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA2] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+ok: [ASA1] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA3] => (item=access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any)
+changed: [ASA4] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA3] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+changed: [ASA2] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA4] => (item=access-group ACLAnsible1 in interface inside )
+changed: [ASA5] => (item=access-list ACLAnsible1 line 999 extended permit ip any any)
+ok: [ASA2] => (item=access-group ACLAnsible1 in interface inside )
+ok: [ASA3] => (item=access-group ACLAnsible1 in interface inside )
+ok: [ASA5] => (item=access-group ACLAnsible1 in interface inside )
+
+PLAY RECAP *********************************************************************
+ASA1                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA2                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA3                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA4                       : ok=10   changed=6    unreachable=0    failed=0   
+ASA5                       : ok=10   changed=6    unreachable=0    failed=0   
+
+
+real	1m8.335s
+user	1m11.502s
+sys	0m9.182s
+
+
+
+1 real ASA:
+real	0m19.611s
+user	0m11.820s
+sys	0m1.497s
+
+1 real ASA second try:
+real	0m20.494s
+user	0m11.744s
+sys	0m1.517s
+
+
+1 Virtual ASA:
+ASA2:
+real	0m58.475s
+user	0m15.516s
+sys	0m2.274s
+
+ASA3:
+real	0m57.220s
+user	0m15.674s
+sys	0m2.187s
+
+ASA4:
+real	0m55.729s
+user	0m15.432s
+sys	0m2.115s
+
+ASA5:
+real	0m54.875s
+user	0m15.379s
+sys	0m2.145s
+
+ASA2 when only ASA2 is running:
+real	0m45.606s
+user	0m14.196s
+sys	0m2.079s
+
+Test with ASA1 and ASA2 but only ASA2 running virtually:
+real	0m45.708s
+user	0m24.187s
+sys	0m3.328s
+
+
+
+
+
+Shorted time:
+1 ASA:
+real	0m19.611s
+user	0m11.820s
+sys	0m1.497s
+
+2 ASA:
+real	0m49.990s
+user	0m23.799s
+sys	0m3.547s
+
+3 ASA:
+real	1m2.935s
+user	0m39.251s
+sys	0m5.347s
+
+4 ASA:
+real	1m7.872s
+user	0m56.903s
+sys	0m7.858s
+
+
+
+5 ASA:
+real	1m8.335s
+user	1m11.502s
+sys	0m9.182s

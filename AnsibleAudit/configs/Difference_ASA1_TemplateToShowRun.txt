@@ -1,0 +1,12 @@
+ switchport access vlan 1
+ no shutdown
+ no shutdown
+ no shutdown
+ no shutdown
+ 
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ 
+ 

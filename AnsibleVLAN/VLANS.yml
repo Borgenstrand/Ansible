@@ -1,0 +1,17 @@
+VLAN:
+   VLANNumber10: 
+      VLANID: 10
+      VLANDescription: VLAN_Number_10
+      RSPAN: False
+   VLANNumber20: 
+      VLANID: 20
+      VLANDescription: VLAN_Number_20
+      RSPAN: False
+   VLANNumber30: 
+      VLANID: 30
+      VLANDescription: VLAN_Number_30
+      RSPAN: False
+   VLANNumber40: 
+      VLANID: 40
+      VLANDescription: VLAN_Number_40_RSPAN
+      RSPAN: True

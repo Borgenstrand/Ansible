@@ -1,0 +1,28 @@
+---
+- hosts: Switches
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+#Below is just VLAN configuration
+  - name: Generate VLAN configuration for each device
+    template:
+      src: "./jinjaOnlyVlan.j2"
+      dest: "./configs/{{inventory_hostname}}_OnlyVLAN.cfg"
+
+  - name: Pushing the configs created using JinjaAndYAML
+    ios_config:
+      src: "./configs/{{inventory_hostname}}_OnlyVLAN.cfg"
+      provider: "{{ connection }}"
+
+

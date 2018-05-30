@@ -1,0 +1,6 @@
+{% for ACL in SharedACLs.keys() %}
+{% for Objects in SharedACLs[ACL].DenyObjects.keys()%}
+no access-list {{ACL}} line 1 extended deny object-group {{Objects}} any any
+no object-group service {{Objects}}
+{% endfor %}
+{% endfor %}

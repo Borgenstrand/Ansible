@@ -1,0 +1,80 @@
+---
+- hosts: Routers:Switches
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+  - name: Generate configs for each device
+    template:
+      src: "./Jinja.j2"
+      dest: "./configs/{{inventory_hostname}}.cfg"
+
+#For this to work with GNS3, please add more space on the disk0 disk under configuration and reload device
+#Then start scp server which ip scp server enable on a cisco device. Napalm also requires an archive(Global config mode archive then path flash/disk0:archive and lastly write-memory.
+  - name: Compare configuration with napalm
+    napalm_install_config:
+      provider: "{{ connection }}"
+      optional_args:
+        inline_transfer: True
+        secret: "{{ ANSIBLE_NET_AUTH_PASS }}"
+      dev_os: ios
+      config_file: "./configs/{{inventory_hostname}}.cfg"
+      commit_changes: False
+      replace_config: True
+      get_diffs: True
+      diff_file: "./configs/Difference_{{inventory_hostname}}.cfg"
+
+
+- hosts: Firewalls
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - firewall.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+
+  - name: Generate configs for each ASA
+    template:
+      src: "./ASAJinja.j2"
+      dest: "./configs/{{inventory_hostname}}_template.txt"
+    register: templateconfig
+
+  - name: Gathering asa running config
+    asa_command:
+      commands: show running
+      provider: "{{ connection }}"
+    register: showconfig
+
+  - name: Save output to configs
+    copy:
+      content: "{{showconfig.stdout[0]}}"
+      dest: "./configs/{{inventory_hostname}}_showrunning.txt"
+
+  - name: Comparing showrunning and the generated template, some lines will differ due to passwords hiding in ASA
+    debug: msg="{{ lookup('pipe', './compare.bash configs/{{inventory_hostname}}_showrunning.txt configs/{{inventory_hostname}}_template.txt > ./configs/Difference_{{inventory_hostname}}_TemplateToShowRun.txt')}}"
+
+  - name: Comparing the generated template with showrunning some defaults lines will differ due to them not being in template
+    debug: msg="{{ lookup('pipe', './compare.bash configs/{{inventory_hostname}}_template.txt configs/{{inventory_hostname}}_showrunning.txt > ./configs/Difference_{{inventory_hostname}}_ShowrunToTemplate.txt')}}"
+
+
+
+
+

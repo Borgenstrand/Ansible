@@ -1,0 +1,13 @@
+graph {
+	graph [bgcolor="#333333" fontcolor=white fontsize=16 label="Network Diagram" rankdir=BT]
+	node [color="#006699" fillcolor="#006699" fontcolor=white fontname=Helvetica margin=0.4 shape=box style=filled]
+	edge [arrowhead=open color=green fontcolor=white fontname=Courier fontsize=10 style=dashed]
+	"SW1.AnsibleLab"
+	"SW2.AnsibleLab"
+	"R3.AnsibleLab"
+	"R1.AnsibleLab"
+	"R1.AnsibleLab" -- "R3.AnsibleLab" [label="            " headlabel="Ser1/0" taillabel="Ser1/0"]
+	"SW1.AnsibleLab" -- "SW2.AnsibleLab" [label="            " headlabel="Fas1/0/31" taillabel="Fas1/0/22"]
+	"SW1.AnsibleLab" -- "SW2.AnsibleLab" [label="            " headlabel="Fas1/0/3" taillabel="Fas1/0/3"]
+	"R1.AnsibleLab" -- "SW1.AnsibleLab" [label="            " headlabel="Fas1/0/7" taillabel="Fas0/0"]
+}

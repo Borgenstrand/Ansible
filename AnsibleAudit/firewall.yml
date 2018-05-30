@@ -1,0 +1,119 @@
+Firewalls:
+   ASA1:
+      links:
+         Ethernet0/0:
+            vlan: 2
+         Ethernet0/1:
+            vlan: 1
+         Vlan1:
+            name: inside
+            IP: 192.168.1.1
+            SubnetMask: 255.255.255.0
+            Securitylevel: 100
+         Vlan2:
+            name: outside
+            IP: 192.168.101.61
+            SubnetMask: 255.255.255.0
+            Securitylevel: 0
+      DefaultGateway: 192.168.101.1
+      LocalNetwork: 192.168.1.0 255.255.255.0
+      DHCPSubnet: 192.168.1.2-192.168.1.10
+      ASAModel: 5505
+      ID: 1
+         
+   ASA2:
+      links:
+         GigabitEthernet1:
+            name: inside
+            IP: 192.168.2.1
+            SubnetMask: 255.255.255.0
+            Securitylevel: 100
+         GigabitEthernet0:
+            name: outside
+            IP: 192.168.101.62
+            SubnetMask: 255.255.255.0
+            Securitylevel: 0
+      DefaultGateway: 192.168.101.1
+      LocalNetwork: 192.168.2.0 255.255.255.0
+      DHCPSubnet: 192.168.2.2-192.168.2.10
+      ASAModel: 5520
+      ID: 2
+   ASA3:
+      links:
+         GigabitEthernet1:
+            name: inside
+            IP: 192.168.3.1
+            SubnetMask: 255.255.255.0
+            Securitylevel: 100
+         GigabitEthernet0:
+            name: outside
+            IP: 192.168.101.63
+            SubnetMask: 255.255.255.0
+            Securitylevel: 0
+      DefaultGateway: 192.168.101.1
+      LocalNetwork: 192.168.3.0 255.255.255.0
+      DHCPSubnet: 192.168.3.2-192.168.3.10
+      ASAModel: 5520
+      ID: 3
+   ASA4:
+      links:
+         GigabitEthernet1:
+            name: inside
+            IP: 192.168.4.1
+            SubnetMask: 255.255.255.0
+            Securitylevel: 100
+         GigabitEthernet0:
+            name: outside
+            IP: 192.168.101.64
+            SubnetMask: 255.255.255.0
+            Securitylevel: 0
+      DefaultGateway: 192.168.101.1
+      LocalNetwork: 192.168.4.0 255.255.255.0
+      DHCPSubnet: 192.168.4.2-192.168.4.10
+      ASAModel: 5520
+      ID: 4
+   ASA5:
+      links:
+         GigabitEthernet1:
+            name: inside
+            IP: 192.168.5.1
+            SubnetMask: 255.255.255.0
+            Securitylevel: 100
+         GigabitEthernet0:
+            name: outside
+            IP: 192.168.101.65
+            SubnetMask: 255.255.255.0
+            Securitylevel: 0
+      DefaultGateway: 192.168.101.1
+      LocalNetwork: 192.168.5.0 255.255.255.0
+      DHCPSubnet: 192.168.5.2-192.168.5.10
+      ASAModel: 5520
+      ID: 5
+
+VPNS2SKey: cisco123
+
+SharedACLs:
+   ACLAnsible1:
+      DenyObjects:
+         DenyObjectAnsible_1:
+            destination:
+               tcp:
+                  - 81
+                  - 71
+               udp:
+                  - 82
+                  - 72
+            source:
+               tcp:
+               udp:
+
+ACLLocation:
+   links:
+      inside:
+         out: 
+         in: ACLAnsible1
+      outside:
+         out: 
+         in: 
+
+

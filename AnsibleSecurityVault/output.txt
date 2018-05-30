@@ -1,0 +1,87 @@
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVault$ ansible-vault encrypt secret.yml 
+New Vault password: 
+Confirm New Vault password: 
+Encryption successful
+
+
+
+
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVault$ ansible-playbook Vault.yml --ask-vault-pass
+Vault password: 
+
+PLAY [R1] **********************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [R1]
+
+TASK [Setting up CDP data file for Diagram usage] ******************************
+ok: [R1]
+
+TASK [debug] *******************************************************************
+ok: [R1] => {
+    "msg": [
+        "Device ID        Local Intrfce     Holdtme    Capability  Platform  Port ID"
+    ]
+}
+
+PLAY RECAP *********************************************************************
+R1                         : ok=3    changed=0    unreachable=0    failed=0   
+
+
+
+
+
+
+
+$ANSIBLE_VAULT;1.1;AES256
+61333365393066636639386137663363623836326336326438346138343561326235623365323436
+6230653430643730623935326132333562383964373537390a386366376436666536653637646533
+65366361323564353737333635626136613039623436343838313837313332313533366462373035
+6535613966663338310a616134353463316161613466383434303431313336616130336534373966
+38363632323764376531303139336362383530356562323264393837343933666437626162383135
+62623530316164306636396164313138303963336631656438326566313334363663633063343666
+37373133353861303236326163613439646332363432393232343835333263326263363564326333
+37663361633031326232383165613864386137333463343132323736306331366139646639653438
+3865
+
+
+
+
+
+
+
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVault$ ansible-playbook Vault.yml --ask-vault-pass
+Vault password: 
+ERROR! Decryption failed (no vault secrets would found that could decrypt) on /home/markus/Desktop/AnsibleProject/AnsibleVault/secret.yml
+
+
+
+
+
+
+
+
+
+
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVault$ ansible-playbook Vault.yml
+ERROR! Attempting to decrypt but no vault secrets found
+
+
+
+
+
+
+If we have the password in a file we could do this:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVault$ ansible-playbook Vault.yml --vault-password-file ./password.txt
+
+and it will run without a problem.
+
+If we want to we could do 
+
+
+
+
+
+
+
+

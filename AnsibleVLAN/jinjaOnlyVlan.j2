@@ -1,0 +1,37 @@
+vtp mode transparent
+{% for VLANs in VLAN.keys() %}
+vlan {{VLAN[VLANs].VLANID}}
+ name {{VLAN[VLANs].VLANDescription}}
+{% if VLAN[VLANs].RSPAN is defined %}
+{% if VLAN[VLANs].RSPAN == True%}
+ remote-span
+{% endif %}
+{% endif %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True%}
+ private-vlan {{VLAN[VLANs].PVLANType}}
+{% endif %}
+{% endif %}
+{% endfor %}   
+
+{% for VLANs in VLAN.keys() %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True %}
+{% if VLAN[VLANs].PVLANType == "primary" %}
+vlan {{VLAN[VLANs].VLANID}}
+{% set ListOfPVLAN = {"VLAN": ""} %}
+{% for VLANs in VLAN.keys() %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True %}
+{% if VLAN[VLANs].PVLANType != "primary" %}
+{% if ListOfPVLAN.update({'VLAN': ListOfPVLAN.VLAN+VLAN[VLANs].VLANID|string+","}) %} {% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+ private-vlan association {{ListOfPVLAN.VLAN[:-1]}}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+

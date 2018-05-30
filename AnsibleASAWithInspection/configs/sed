@@ -1,0 +1,87 @@
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: ip address 192.168.101.62 255.255.255.0
+ASA2_template.cfg: no shutdown
+ASA2_template.cfg: ip address 192.168.2.1 255.255.255.0
+ASA2_template.cfg: no shutdown
+ASA2_template.cfg:
+ASA2_template.cfg: 
+ASA2_template.cfg:route outside 0.0.0.0 0.0.0.0 192.168.101.1 1
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:route outside 192.168.5.0 255.255.255.0 192.168.101.65 1
+ASA2_template.cfg:
+ASA2_template.cfg:crypto ipsec ikev1 transform-set SITETOSITEASA2toASA5 esp-aes-256 esp-sha-hmac
+ASA2_template.cfg:crypto map S2SVPN 25 set peer 192.168.101.65
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: ikev1 pre-shared-key cisco123
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:route outside 192.168.4.0 255.255.255.0 192.168.101.64 1
+ASA2_template.cfg:
+ASA2_template.cfg:crypto ipsec ikev1 transform-set SITETOSITEASA2toASA4 esp-aes-256 esp-sha-hmac
+ASA2_template.cfg:crypto map S2SVPN 24 set peer 192.168.101.64
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: ikev1 pre-shared-key cisco123
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:route outside 192.168.3.0 255.255.255.0 192.168.101.63 1
+ASA2_template.cfg:
+ASA2_template.cfg:crypto ipsec ikev1 transform-set SITETOSITEASA2toASA3 esp-aes-256 esp-sha-hmac
+ASA2_template.cfg:crypto map S2SVPN 23 set peer 192.168.101.63
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: ikev1 pre-shared-key cisco123
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:route outside 192.168.1.0 255.255.255.0 192.168.101.61 1
+ASA2_template.cfg:
+ASA2_template.cfg:crypto ipsec ikev1 transform-set SITETOSITEASA2toASA1 esp-aes-256 esp-sha-hmac
+ASA2_template.cfg:crypto map S2SVPN 21 set peer 192.168.101.61
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: ikev1 pre-shared-key cisco123
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: 
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:aaa authentication ssh console LOCAL
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg:
+ASA2_template.cfg: 
+ASA2_template.cfg:
+ASA2_template.cfg:

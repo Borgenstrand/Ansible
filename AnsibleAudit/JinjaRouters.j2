@@ -1,0 +1,53 @@
+{% for node in nodes.keys() %}
+{% if inventory_hostname == node %}
+hostname {{inventory_hostname}}
+ip domain name AnsibleLab
+ip ssh version 2
+ip scp server enable
+username admin secret 5 $1$wyBg$LQ.m.P7vtS2SX0KSB.l6Q/
+enable secret 5 $1$ByiX$NBrdOQxg8MuZayC2kIklv.
+aaa new-model
+aaa authentication login default local enable
+aaa authentication login CONSOLE none
+line con 0
+ login authentication CONSOLE
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+
+ip cef
+no ipv6 cef
+{% for link in nodes[node].links.keys() %}
+interface {{ link }}
+ ip address {{nodes[node].links[link].ip}}
+no shutdown
+{% endfor %}
+
+service timestamps debug datetime msec
+service timestamps log datetime msec
+boot-start-marker
+boot-end-marker
+aaa session-id common
+multilink bundle-name authenticated
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+control-plane
+
+
+router bgp {{nodes[node].BGP.AS}}
+ bgp log-neighbor-changes
+ bgp router-id {{nodes[node].BGP.rid}}
+{% for networks in nodes[node].BGP.Network %}
+ network {{networks}}
+{% endfor %}
+{% for neighborsIP in nodes[node].BGP.Neighbors.keys() %}
+ neighbor {{neighborsIP}} remote-as {{nodes[node].BGP.Neighbors[neighborsIP]}}
+{% endfor%}
+
+ip route 192.168.1.0 255.255.255.0 192.168.101.61
+
+{% endif %}
+{% endfor %}   
+

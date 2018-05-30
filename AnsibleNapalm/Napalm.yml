@@ -1,0 +1,39 @@
+---
+- hosts: GNS3
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+#        secret: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+#  - name: Generate configs for each router
+#    template:
+#      src: "./jinjatest.j2"
+#      dest: "./configs/{{inventory_hostname}}.cfg"
+
+
+
+#For this to work with GNS3, please add more space on the disk0 disk under configuration and reload device
+#Then start scp server which ip scp server enable on a cisco device.
+  - name: Get facts with napalm
+    napalm_get_facts:
+      provider: "{{ connection }}"
+      optional_args:
+        inline_transfer: True
+        secret: "{{ ANSIBLE_NET_AUTH_PASS }}"
+      dev_os: ios
+      filter: "bgp_neighbors"
+    register: result
+
+
+  - name: print data from Napalm get facts
+    debug: var=result

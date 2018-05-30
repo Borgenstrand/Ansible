@@ -1,0 +1,68 @@
+---
+- hosts: R1
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+#  - debug: msg={{nodes.R1.links[nodes.R1.links.keys()[0]].ip}}
+#  - debug: msg={{nodes.R1.links.keys()[0]}}
+#  - name: Generate configs for each router
+#    template:
+#      src: "./jinjatest.j2"
+#      dest: "./configs/{{inventory_hostname}}.cfg"
+
+
+#  - name: changing hostname
+#    ios_config:
+#      lines: hostname R11
+#      provider: "{{ connection }}"
+#    register: showinformation
+
+
+  - name: Setting up RSA keys
+    ios_config:
+      lines:
+      - crypto key generate rsa modulus 2048 exportable
+      provider: "{{ connection }}"
+    register: showinformation
+
+#  - debug:
+#      msg: "{{showinformation.stdout_lines[0]}}"
+
+#  - name: Save output to local folder for pythonscript
+#    copy:
+#      content: "{{showinformation.stdout[0]}}"
+#      dest: "CDP/show_CDP_{{inventory_hostname}}.txt"
+
+#  - name: Using the configs created using JinjaAndYML
+#    ios_config:
+#      src: "./configs/{{inventory_hostname}}.cfg"
+#      provider: "{{ connection }}"
+
+
+
+
+
+#  - name: Setting up OSPF Passive Interfaces
+#    ios_config:
+#      lines: 
+#      - passive-interface {{item[0]}}
+#      parents:
+#      - router ospf 1
+#      provider: "{{ connection }}"
+#    when:
+#      - item[1].passiveinterface is defined 
+#      - item[1].passiveinterface == True 
+#    with_items:
+#      - "{{nodes[inventory_hostname].links.items()}}"
+    

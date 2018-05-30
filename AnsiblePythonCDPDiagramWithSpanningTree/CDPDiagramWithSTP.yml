@@ -1,0 +1,83 @@
+---
+- hosts: Routers
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+
+  - name: Setting up CDP data file for Diagram usage
+    ios_command:
+      commands: show cdp neighbors | begin Device ID
+      provider: "{{ connection }}"
+    register: showinformation
+  - name: Save output to local folder for pythonscript
+    copy:
+      content: "{{showinformation.stdout[0]}}"
+      dest: "CDP/{{inventory_hostname}}_show_CDP.txt"
+
+
+- hosts: Switches
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+
+  - name: Setting up CDP data file for Diagram usage
+    ios_command:
+      commands: show cdp neighbors | begin Device ID
+      provider: "{{ connection }}"
+    register: showinformation
+  - name: Save output to local folder for pythonscript
+    copy:
+      content: "{{showinformation.stdout[0]}}"
+      dest: "CDP/{{inventory_hostname}}_show_CDP.txt"
+
+  - name: Setting up STP data file for Diagram usage
+    ios_command:
+      commands: show spanning-tree blockedports | include VLAN
+      provider: "{{ connection }}"
+    register: showSTP
+    ignore_errors: true
+  - name: Save output to local folder for pythonscript
+    copy:
+      content: "{{showSTP.stdout[0]}}"
+      dest: "STP/{{inventory_hostname}}_show_STP.txt"
+
+
+  - name: Setting up STP root data file for Diagram usage
+    ios_command:
+      commands: show spanning-tree | include VLAN|This bridge is the root
+      provider: "{{ connection }}"
+    register: showSTPRoot
+    ignore_errors: true
+  - name: Save output to local folder for pythonscript
+    copy:
+      content: "{{showSTPRoot.stdout[0]}}"
+      dest: "STPRoot/{{inventory_hostname}}_show_STP_Root.txt"
+
+ 
+
+  - name: Running script to create a network diagram
+    debug: msg="{{ lookup('pipe', './PythonDiagramWithSpanningTree.py')}}"
+    run_once: true
+

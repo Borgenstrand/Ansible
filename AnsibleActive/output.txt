@@ -1,0 +1,52 @@
+markus@Borgen-kali:~$ ansible-playbook Active.yml 
+
+PLAY [Routers:Switches] *******************************************
+
+TASK [Define connection] ******************************************
+ok: [R1]
+ok: [R2]
+ok: [R3]
+ok: [SW1]
+ok: [SW2]
+
+TASK [gathering IOS facts to verify activeness] *******************
+ok: [SW2]
+ok: [R1]
+ok: [SW1]
+ok: [R3]
+ok: [R2]
+
+TASK [Printing information about unreachable nodes] ***************
+skipping: [R1]
+skipping: [R2]
+skipping: [R3]
+skipping: [SW1]
+skipping: [SW2]
+
+PLAY [Firewalls] **************************************************
+
+TASK [Define connection] ******************************************
+
+ok: [ASA2]
+
+TASK [gathering IOS facts to verify activeness] *******************
+
+fatal: [ASA2]: FAILED! => {"changed": false, "msg": "unable to open shell. Please see: https://docs.ansible.com/ansible/network_debug_troubleshooting.html#unable-to-open-shell"}
+...ignoring
+
+TASK [Printing information about unreachable nodes] ***************
+
+ok: [ASA2] => {
+    "msg": "Failed on node ASA2 with IP address 192.168.101.62 might be down, SSH access not working or no route to or from the node"
+}
+
+PLAY RECAP ********************************************************
+
+ASA2                       : ok=3    changed=0    unreachable=0    failed=0   
+R1                         : ok=2    changed=0    unreachable=0    failed=0   
+R2                         : ok=2    changed=0    unreachable=0    failed=0   
+R3                         : ok=2    changed=0    unreachable=0    failed=0   
+SW1                        : ok=2    changed=0    unreachable=0    failed=0   
+SW2                        : ok=2    changed=0    unreachable=0    failed=0   
+
+

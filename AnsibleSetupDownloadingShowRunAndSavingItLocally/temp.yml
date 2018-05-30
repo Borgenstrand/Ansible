@@ -1,0 +1,71 @@
+---
+- hosts: GNS3
+  gather_facts: no
+  connection: local
+
+  tasks:
+  - name: Get credentials
+    include_vars: ios.yml
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+#  - name: Gathering IOS running config
+#    ios_command:
+#      commands: show running
+#      provider: "{{ connection }}"
+#    register: config
+#  - name: Gathering IOS time 
+#    ios_command:
+#      commands: show clock
+#      provider: "{{ connection }}"
+#    register: time
+#  - name: Save output to /etc/ansible/backups
+#    copy:
+#      content: "{{config.stdout[0]}}"
+#      dest: "/etc/ansible/backups/show_run_{{inventory_hostname}}_{{time.stdout[0][1:]}}.txt"
+
+
+#  - debug: 
+#      msg: "{{time.stdout[0][1:]}}"
+
+
+
+
+
+  - name: Gathering time
+    host: localhost
+    debug: msg="{{lookup('pipe','date --iso-8601=minutes')}}"
+    register: time
+#      commands: show clock
+#      provider: "{{ connection }}"
+#    register: time
+
+  - name: Testing variable
+    debug: msg="{{time.msg}}"
+
+
+
+
+
+
+
+#.{{time.stdout[0][14:17]}}.{{time.stdout[0][19:22]}}.{{time.stdout[0][24:27]}}.{{time.stdout[0][29:31]}}.{{time.stdout[0][33:37]}}
+
+#  - name: Create the directory for the configuration
+#    file: path=./ state=directory
+#    run_once: true
+#  - name: Generate Configuration
+#    template: src=jinjatest.j2 dest={{inventory_hostname}}-config.txt
+
+#    loop: "{{nodes}}"
+#      msg: "{{nodes[inventory_hostname].links[nodes[inventory_hostname].links.keys()].ip}}"
+#    loop: "{{nodes[inventory_hostname].links}}"
+#  - debug:
+#      msg: "System {{inventory_hostname}} has this IP  {{nodes[inventory_hostname].links}}"
+
+#    register: thefacts
+#  - debug: var=thefacts.stdout_lines

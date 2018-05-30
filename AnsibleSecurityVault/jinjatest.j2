@@ -1,0 +1,10 @@
+{% for node in nodes.keys() %}
+  {% if inventory_hostname == node %}
+  {% for link in nodes[node].links.keys() %}
+    interface {{ link }}
+    ip address {{nodes[node].links[link].ip}}
+    ip ospf 1 area 0
+  {% endfor %}
+  {% endif %}
+{% endfor %}   
+

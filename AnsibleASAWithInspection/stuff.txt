@@ -1,0 +1,25 @@
+grep -vxFf ASA2_showrunning.txt ASA2_template.cfg
+
+grep -vxFf ASA2_showrunning.txt ASA2_template.cfg | sed -r '/^(\s*#|$)/d;'
+
+
+
+
+aaa authentication ssh console LOCAL
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA1 esp-aes-256 esp-sha-hmac
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA3 esp-aes-256 esp-sha-hmac
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA4 esp-aes-256 esp-sha-hmac
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA5 esp-aes-256 esp-sha-hmac
+crypto map S2SVPN 21 set peer 192.168.101.61
+crypto map S2SVPN 23 set peer 192.168.101.63
+crypto map S2SVPN 24 set peer 192.168.101.64
+crypto map S2SVPN 25 set peer 192.168.101.65
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ ikev1 pre-shared-key cisco123
+ ip address 192.168.101.62 255.255.255.0
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+ no shutdown
+

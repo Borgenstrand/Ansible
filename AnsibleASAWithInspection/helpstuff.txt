@@ -1,0 +1,9 @@
+object-group service DenyObjectAnsible_1
+service tcp destination eq 81
+service udp destination eq 71
+
+access-list ACLAnsible1 line 1 extended deny object-group DenyObjectAnsible_1 any any
+access-list ACLAnsible1 line 999 permit ip any any
+
+
+access-group ACLAnsible1 in interface inside

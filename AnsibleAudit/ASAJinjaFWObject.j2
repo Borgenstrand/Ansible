@@ -1,0 +1,14 @@
+{% for ACL in SharedACLs.keys() %}
+{% for Objects in SharedACLs[ACL].DenyObjects.keys()%}
+{% for srcDest in SharedACLs[ACL].DenyObjects[Objects].keys() %}
+{% for Protocol in SharedACLs[ACL].DenyObjects[Objects][srcDest].keys()%}
+{% if SharedACLs[ACL].DenyObjects[Objects][srcDest][Protocol] is not none %}
+{% for ports in SharedACLs[ACL].DenyObjects[Objects][srcDest][Protocol] %}
+service {{Protocol}} {{srcDest}} eq {{ports}}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+

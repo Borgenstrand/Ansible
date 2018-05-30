@@ -1,0 +1,4 @@
+Device ID        Local Intrfce     Holdtme    Capability  Platform  Port ID
+R3.AnsibleLab    Ser 1/2           157               R    7206VXR   Ser 1/3
+R3.AnsibleLab    Ser 1/0           157               R    7206VXR   Ser 1/0
+R2.AnsibleLab    Fas 0/0           134               R    7206VXR   Fas 0/0

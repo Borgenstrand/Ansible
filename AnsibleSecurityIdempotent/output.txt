@@ -1,0 +1,26 @@
+
+
+
+First time we run the playbook we get:
+TASK [changing hostname] ******************************
+changed: [R1]
+
+
+
+TASK [changing hostname] ******************************************************
+ok: [R1]
+
+
+
+
+
+  - name: Setting up RSA keys
+    ios_config:
+      lines:
+      - crypto key generate rsa modulus 2048 exportable
+      provider: "{{ connection }}"
+    register: showinformation
+
+TASK [Setting up RSA keys] *****************************************************
+changed: [R1]
+

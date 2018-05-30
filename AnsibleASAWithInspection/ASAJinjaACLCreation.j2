@@ -1,0 +1,14 @@
+{% for ACL in SharedACLs.keys() %}
+{% for Objects in SharedACLs[ACL].DenyObjects.keys()%}
+access-list {{ACL}} line 1 extended deny object-group {{Objects}} any any
+access-list {{ACL}} line 999 extended permit ip any any
+{% endfor %}
+{% endfor %}
+{% for Links in ACLLocation.links.keys() %}
+{% for direction in ACLLocation.links[Links].keys() %}
+{% if ACLLocation.links[Links][direction] %}
+access-group {{ACLLocation.links[Links][direction]}} {{direction}} interface {{Links}} 
+{% endif %}
+{% endfor %}
+{% endfor %}
+

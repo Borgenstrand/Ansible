@@ -1,0 +1,57 @@
+---
+- hosts: Routers:Switches
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+  - name: gathering IOS facts to verify activeness
+    ios_facts:
+      provider: "{{ connection }}"
+    register: gatherInformation
+    ignore_errors: True
+
+  - name: Printing information about unreachable nodes
+    debug: 
+      msg: "Failed on node {{inventory_hostname}} with IP address {{ansible_ssh_host}} might be down, SSH access not working or no route to or from the node"
+    when: gatherInformation is failed
+
+
+
+
+- hosts: Firewalls
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - nodes.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+  - name: gathering IOS facts to verify activeness
+    asa_command:
+      commands:
+        - show version
+      provider: "{{ connection }}"
+    register: gatherInformation
+    ignore_errors: True
+
+  - name: Printing information about unreachable nodes
+    debug: 
+      msg: "Failed on node {{inventory_hostname}} with IP address {{ansible_ssh_host}} might be down, SSH access not working or no route to or from the node"
+    when: gatherInformation is failed

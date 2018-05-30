@@ -1,0 +1,42 @@
+---
+- hosts: Firewalls
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - firewall.yml
+#  - VLANS.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+
+  - name: Generate configs for each device
+    template:
+      src: "./ASAJinja.j2"
+      dest: "./configs/{{inventory_hostname}}_template.txt"
+    register: templateconfig
+
+  - name: Gathering asa running config
+    asa_command:
+      commands: show running
+      provider: "{{ connection }}"
+    register: showconfig
+
+  - name: Save output to configs
+    copy:
+      content: "{{showconfig.stdout[0]}}"
+      dest: "./configs/{{inventory_hostname}}_showrunning.txt"
+
+  - name: Comparing showrunning and the generated template, some lines will differ due to passwords hiding in ASA
+    debug: msg="{{ lookup('pipe', './compare.bash configs/{{inventory_hostname}}_showrunning.txt configs/{{inventory_hostname}}_template.txt')}}"
+
+  - name: Comparing the generated template with showrunning some defaults lines will differ due to them not being in template
+    debug: msg="{{ lookup('pipe', './compare.bash configs/{{inventory_hostname}}_template.txt configs/{{inventory_hostname}}_showrunning.txt')}}"
+
+

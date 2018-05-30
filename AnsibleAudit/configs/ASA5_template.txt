@@ -1,0 +1,187 @@
+
+hostname ASA5
+domain-name AnsibleLab
+enable password 9jNfZuG3TC5tCVH0 encrypted
+username admin password e1z89R3cZe9Kt6Ib encrypted
+!
+
+
+interface GigabitEthernet0
+ nameif outside
+ security-level 0
+ ip address 192.168.101.65 255.255.255.0 
+ no shutdown
+interface GigabitEthernet1
+ nameif inside
+ security-level 100
+ ip address 192.168.5.1 255.255.255.0 
+ no shutdown
+
+dns domain-lookup inside
+dns domain-lookup outside
+dns server-group DefaultDNS
+ name-server 192.168.101.1
+ domain-name AnsibleLab
+ 
+route outside 0.0.0.0 0.0.0.0 192.168.101.1 1 
+
+crypto ipsec security-association lifetime seconds 86400
+crypto ipsec security-association pmtu-aging infinite
+
+
+
+
+access-list SITETOSITEACLASA5toASA4 extended permit ip 192.168.5.0 255.255.255.0 192.168.4.0 255.255.255.0 
+access-list SITETOSITEACLASA5toASA4 extended deny ip any any 
+
+
+route outside 192.168.4.0 255.255.255.0 192.168.101.64 1 
+
+crypto ipsec ikev1 transform-set SITETOSITEASA5toASA4 esp-aes-256 esp-sha-hmac 
+crypto map S2SVPN 54 match address SITETOSITEACLASA5toASA4
+crypto map S2SVPN 54 set pfs group5
+crypto map S2SVPN 54 set peer 192.168.101.64 
+crypto map S2SVPN 54 set ikev1 transform-set SITETOSITEASA5toASA4
+crypto map S2SVPN interface outside
+
+
+tunnel-group 192.168.101.64 type ipsec-l2l
+tunnel-group 192.168.101.64 ipsec-attributes
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+access-list SITETOSITEACLASA5toASA3 extended permit ip 192.168.5.0 255.255.255.0 192.168.3.0 255.255.255.0 
+access-list SITETOSITEACLASA5toASA3 extended deny ip any any 
+
+
+route outside 192.168.3.0 255.255.255.0 192.168.101.63 1 
+
+crypto ipsec ikev1 transform-set SITETOSITEASA5toASA3 esp-aes-256 esp-sha-hmac 
+crypto map S2SVPN 53 match address SITETOSITEACLASA5toASA3
+crypto map S2SVPN 53 set pfs group5
+crypto map S2SVPN 53 set peer 192.168.101.63 
+crypto map S2SVPN 53 set ikev1 transform-set SITETOSITEASA5toASA3
+crypto map S2SVPN interface outside
+
+
+tunnel-group 192.168.101.63 type ipsec-l2l
+tunnel-group 192.168.101.63 ipsec-attributes
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+access-list SITETOSITEACLASA5toASA2 extended permit ip 192.168.5.0 255.255.255.0 192.168.2.0 255.255.255.0 
+access-list SITETOSITEACLASA5toASA2 extended deny ip any any 
+
+
+route outside 192.168.2.0 255.255.255.0 192.168.101.62 1 
+
+crypto ipsec ikev1 transform-set SITETOSITEASA5toASA2 esp-aes-256 esp-sha-hmac 
+crypto map S2SVPN 52 match address SITETOSITEACLASA5toASA2
+crypto map S2SVPN 52 set pfs group5
+crypto map S2SVPN 52 set peer 192.168.101.62 
+crypto map S2SVPN 52 set ikev1 transform-set SITETOSITEASA5toASA2
+crypto map S2SVPN interface outside
+
+
+tunnel-group 192.168.101.62 type ipsec-l2l
+tunnel-group 192.168.101.62 ipsec-attributes
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+access-list SITETOSITEACLASA5toASA1 extended permit ip 192.168.5.0 255.255.255.0 192.168.1.0 255.255.255.0 
+access-list SITETOSITEACLASA5toASA1 extended deny ip any any 
+
+
+route outside 192.168.1.0 255.255.255.0 192.168.101.61 1 
+
+crypto ipsec ikev1 transform-set SITETOSITEASA5toASA1 esp-aes-256 esp-sha-hmac 
+crypto map S2SVPN 51 match address SITETOSITEACLASA5toASA1
+crypto map S2SVPN 51 set pfs group5
+crypto map S2SVPN 51 set peer 192.168.101.61 
+crypto map S2SVPN 51 set ikev1 transform-set SITETOSITEASA5toASA1
+crypto map S2SVPN interface outside
+
+
+tunnel-group 192.168.101.61 type ipsec-l2l
+tunnel-group 192.168.101.61 ipsec-attributes
+ ikev1 pre-shared-key cisco123
+
+
+
+ 
+
+
+crypto ca trustpool policy
+crypto ikev1 enable outside
+
+crypto ikev1 policy 1
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 5
+ lifetime 86400
+
+dhcpd address 192.168.5.2-192.168.5.10 inside
+dhcpd enable inside
+
+
+
+ntp server 82.102.5.110 source outside
+ssh stricthostkeycheck
+ssh 192.168.1.0 255.255.255.0 inside
+ssh 192.168.1.0 255.255.255.0 outside
+ssh 192.168.101.0 255.255.255.0 outside
+ssh timeout 10
+ssh version 2
+ssh key-exchange group dh-group14-sha1
+console timeout 0
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+aaa authentication ssh console LOCAL 
+http server enable
+http 192.168.1.0 255.255.255.0 inside
+http 192.168.1.0 255.255.255.0 outside
+
+class-map inspection_default
+ match default-inspection-traffic
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect ftp 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect ip-options 
+  inspect netbios 
+  inspect rsh 
+  inspect rtsp 
+  inspect skinny  
+  inspect esmtp 
+  inspect sqlnet 
+  inspect sunrpc 
+  inspect tftp 
+  inspect sip  
+  inspect xdmcp 
+  inspect icmp 
+!
+service-policy global_policy global
+
+
+ 
+
+

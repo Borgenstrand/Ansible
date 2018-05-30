@@ -1,0 +1,118 @@
+
+vtp mode transparent
+{% for VLANs in VLAN.keys() %}
+vlan {{VLAN[VLANs].VLANID}}
+ name {{VLAN[VLANs].VLANDescription}}
+{% if VLAN[VLANs].RSPAN is defined %}
+{% if VLAN[VLANs].RSPAN == True%}
+ remote-span
+{% endif %}
+{% endif %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True%}
+ private-vlan {{VLAN[VLANs].PVLANType}}
+{% endif %}
+{% endif %}
+{% endfor %}   
+
+{% for VLANs in VLAN.keys() %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True %}
+{% if VLAN[VLANs].PVLANType == "primary" %}
+vlan {{VLAN[VLANs].VLANID}}
+{% set ListOfPVLAN = {"VLAN": ""} %}
+{% for VLANs in VLAN.keys() %}
+{% if VLAN[VLANs].PVLAN is defined %}
+{% if VLAN[VLANs].PVLAN == True %}
+{% if VLAN[VLANs].PVLANType != "primary" %}
+{% if ListOfPVLAN.update({'VLAN': ListOfPVLAN.VLAN+VLAN[VLANs].VLANID|string+","}) %} {% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+ private-vlan association {{ListOfPVLAN.VLAN[:-1]}}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% for node in nodes.keys() %}
+{% if inventory_hostname == node %}
+hostname {{inventory_hostname}}
+ip domain-name AnsibleLab
+ip ssh version 2
+ip scp server enable
+username admin secret 5 $1$wyBg$LQ.m.P7vtS2SX0KSB.l6Q/
+enable secret 5 $1$ByiX$NBrdOQxg8MuZayC2kIklv.
+aaa new-model
+aaa authentication login default local enable
+aaa authentication login CONSOLE none
+line con 0
+ login authentication CONSOLE
+ stopbits 1
+line vty 0 4
+ip classless
+ip http server
+ip http secure-server
+ip sla enable reaction-alerts
+line vty 5 15
+
+
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+boot-start-marker
+boot-end-marker
+aaa session-id common
+
+archive
+ path flash:archive
+ write-memory
+
+ip routing
+ip route 0.0.0.0 0.0.0.0 192.168.101.1
+
+
+{% for link in nodes[node].links.keys() %}
+interface {{link}}
+{% if nodes[node].links[link].Type is defined %}
+
+
+{% if nodes[node].links[link].Type == "trunk" %}
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan {{nodes[node].links[link].VLAN}}
+ description {{nodes[node].links[link].Description}}
+{% endif%}
+
+{% if nodes[node].links[link].Type == "access" %}
+ switchport mode access
+ switchport nonegotiate
+ switchport access vlan {{nodes[node].links[link].VLAN}}
+ switchport voice vlan {{nodes[node].links[link].VoiceVLAN}}
+ description {{nodes[node].links[link].Description}}
+{% if nodes[node].links[link].PortSec is defined%}
+{% if nodes[node].links[link].PortSec==True%}
+ switchport port-security violation {{nodes[node].links[link].PortSecViolation}}
+ switchport port-security maximum {{nodes[node].links[link].PortSecMaximum}}
+ switchport port-security {{nodes[node].links[link].PortSecDevice}}
+ switchport port-security
+{% endif%}
+{% endif%}
+{% endif%}
+
+{% endif%}
+
+{% if nodes[node].links[link].ip is defined %}
+ ip address {{ nodes[node].links[link].ip }}
+ no shutdown
+{% endif%}
+
+ip route 192.168.1.0 255.255.255.0 192.168.101.61
+  
+{% endfor %}
+{% endif %}
+{% endfor %}   

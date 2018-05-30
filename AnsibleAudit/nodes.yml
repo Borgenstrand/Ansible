@@ -1,0 +1,158 @@
+nodes:
+   R1:
+      links:
+         Serial1/0: 
+            ip: 10.1.0.1 255.255.255.0
+            passiveinterface: False
+         FastEthernet0/0: 
+            ip: 192.168.101.11 255.255.255.0
+            passiveinterface: False
+         Loopback0:
+            ip: 1.1.1.1 255.255.255.255
+            passiveinterface: True
+      ospf:
+         rid: 1.1.1.1
+      BGP:
+         rid: 1.1.1.1
+         AS: 10
+         Network: ['10.1.0.0 mask 255.255.255.0','192.168.101.0']
+         Neighbors:
+            192.168.101.12: 10
+            10.1.0.3: 100
+         
+   R2:
+      links:
+         Serial1/1: 
+            ip: 10.1.1.2 255.255.255.0
+            passiveinterface: no
+         FastEthernet0/0:
+            ip: 192.168.101.12 255.255.255.0
+            passiveinterface: no
+         Loopback0:
+            ip: 2.2.2.2 255.255.255.255
+            passiveinterface: yes
+      ospf:
+         rid: 2.2.2.2
+      BGP:
+         rid: 2.2.2.2
+         AS: 10
+         Network: ['10.1.1.0 mask 255.255.255.0','192.168.101.0']
+         Neighbors:
+            192.168.101.11: 10
+            10.1.1.3: 100
+   R3:
+      links:
+         Serial1/1: 
+            ip: 10.1.1.3 255.255.255.0
+            passiveinterface: no
+         Serial1/0:
+            ip: 10.1.0.3 255.255.255.0
+            passiveinterface: no
+         Loopback0:
+            ip: 3.3.3.3 255.255.255.255
+            passiveinterface: yes
+      ospf:
+         rid: 3.3.3.3
+      BGP:
+         rid: 3.3.3.3
+         AS: 100
+         Network: ['10.1.1.0 mask 255.255.255.0','10.1.0.0 mask 255.255.255.0']
+         Neighbors:
+            10.1.0.1: 10
+            10.1.1.2: 10
+
+
+   SW1:
+      links:
+         FastEthernet1/0/1:
+            VLAN: 10
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Internet
+         FastEthernet1/0/2:
+            VLAN: 20
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Something else
+            PortSec: yes
+            PortSecViolation: restrict
+            PortSecDevice: mac-address sticky
+            PortSecMaximum: 3
+         FastEthernet1/0/3:
+            VLAN: all
+            Type: trunk
+            Description: Trunk link to SW2
+         FastEthernet1/0/4:
+            VLAN: 10
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Something
+            PortSec: yes
+            PortSecViolation: shutdown
+            PortSecDevice: mac-address sticky
+            PortSecMaximum: 3
+         Vlan10:
+            ip: 192.168.101.91 255.255.255.0
+
+   SW2:
+      links:
+         FastEthernet1/0/1:
+            VLAN: 10
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Internet
+         FastEthernet1/0/2:
+            VLAN: 20
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Something else
+            PortSec: yes
+            PortSecViolation: restrict
+            PortSecDevice: mac-address sticky
+            PortSecMaximum: 3
+         FastEthernet1/0/3:
+            VLAN: all
+            Type: trunk
+            Description: Trunk link to SW1
+         FastEthernet1/0/4:
+            VLAN: 10
+            VoiceVLAN: 11
+            Type: access
+            Description: Access link to Something
+            PortSec: yes
+            PortSecViolation: shutdown
+            PortSecDevice: mac-address sticky
+            PortSecMaximum: 3
+         Vlan10:
+            ip: 192.168.101.92 255.255.255.0
+
+
+VLAN:
+   VLANNumber10: 
+      VLANID: 10
+      VLANDescription: VLAN_Number_10
+   VLANNumber20: 
+      VLANID: 20
+      VLANDescription: VLAN_Number_20
+   VLANNumber11: 
+      VLANID: 11
+      VLANDescription: Voice_VLAN
+   VLANNumber40: 
+      VLANID: 40
+      VLANDescription: VLAN_Number_40_RSPAN
+      RSPAN: True
+   VLANNumber100: 
+      VLANID: 100
+      VLANDescription: PVLAN_100_Primary
+      PVLAN: True
+      PVLANType: primary
+   VLANNumber110: 
+      VLANID: 110
+      VLANDescription: PVLAN_110_Isolated
+      PVLAN: True
+      PVLANType: isolated
+   VLANNumber120: 
+      VLANID: 120
+      VLANDescription: PVLAN_120_Community
+      PVLAN: True
+      PVLANType: community

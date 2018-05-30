@@ -1,0 +1,7 @@
+{% if group_names[0]=="Routers" %}
+{% include "JinjaRouters.j2" %}
+{% elif group_names[0]=="Switches" %}
+{% include "JinjaSwitches.j2" %}
+{% else %}
+{{group_names[0]}}
+{% endif %}

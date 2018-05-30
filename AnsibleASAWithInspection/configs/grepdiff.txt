@@ -1,0 +1,87 @@
+
+
+
+ ip address 192.168.101.62 255.255.255.0
+ no shutdown
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+
+ 
+route outside 0.0.0.0 0.0.0.0 192.168.101.1 1
+
+
+
+
+
+
+
+route outside 192.168.5.0 255.255.255.0 192.168.101.65 1
+
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA5 esp-aes-256 esp-sha-hmac
+crypto map S2SVPN 25 set peer 192.168.101.65
+
+
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+
+
+route outside 192.168.4.0 255.255.255.0 192.168.101.64 1
+
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA4 esp-aes-256 esp-sha-hmac
+crypto map S2SVPN 24 set peer 192.168.101.64
+
+
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+
+
+route outside 192.168.3.0 255.255.255.0 192.168.101.63 1
+
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA3 esp-aes-256 esp-sha-hmac
+crypto map S2SVPN 23 set peer 192.168.101.63
+
+
+ ikev1 pre-shared-key cisco123
+
+
+
+
+
+
+
+
+route outside 192.168.1.0 255.255.255.0 192.168.101.61 1
+
+crypto ipsec ikev1 transform-set SITETOSITEASA2toASA1 esp-aes-256 esp-sha-hmac
+crypto map S2SVPN 21 set peer 192.168.101.61
+
+
+ ikev1 pre-shared-key cisco123
+
+
+
+ 
+
+
+
+
+
+
+
+aaa authentication ssh console LOCAL
+
+
+
+ 
+
+

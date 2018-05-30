@@ -1,0 +1,99 @@
+---
+- hosts: Firewalls
+  gather_facts: no
+  connection: local
+  vars_files:
+  - ios.yml
+  - firewall.yml
+#  - VLANS.yml
+  tasks:
+  - name: Define connection
+    set_fact:
+      connection:
+        authorize: yes
+        username: "{{ ANSIBLE_NET_USERNAME }}"
+        password: "{{ ANSIBLE_NET_PASS }}"
+        auth_pass: "{{ ANSIBLE_NET_AUTH_PASS }}"
+
+  - name: Generate removal of old Object and Deny statement for each device
+    template:
+      src: "./ASAJinjaFWRemove.j2"
+      dest: "./configs/{{inventory_hostname}}_FWRemove.cfg"
+
+  - name: Generate new of Object and Deny statement for each device
+    template:
+      src: "./ASAJinjaFWObject.j2"
+      dest: "./configs/{{inventory_hostname}}_FWObject.cfg"
+  - name: Generate the ACLs
+    template:
+      src: "./ASAJinjaACLCreation.j2"
+      dest: "./configs/{{inventory_hostname}}_FWACL.cfg"
+
+
+
+
+
+
+  - name: get file content FWObject
+    command: 'cat ./configs/{{inventory_hostname}}_FWObject.cfg'
+    register: FWObject
+  - name: get file content FWRemove
+    command: 'cat ./configs/{{inventory_hostname}}_FWRemove.cfg'
+    register: FWRemove
+  - name: get file content FWACL
+    command: 'cat ./configs/{{inventory_hostname}}_FWACL.cfg'
+    register: FWACL
+
+
+
+  - name: Clearing the old
+    asa_config:
+      lines:
+        - "{{ item }}"
+      provider: "{{ connection }}"
+    ignore_errors: True
+    with_items: "{{FWRemove.stdout_lines}}"
+
+
+#asa_config did not want to work directly with SRC and Parents functions in the asa_config module. Workaround was to read it into a variable and looping over the variable
+  - name: Pushing the new object and deny statement created using JinjaAndYAML
+    asa_config:
+      lines:
+        - "{{ item }}"
+      parents: 
+      - object-group service DenyObjectAnsible_1 
+      provider: "{{ connection }}"
+    with_items: "{{FWObject.stdout_lines}}"
+
+
+  - name: Pushing the new ACL
+    asa_config:
+      lines:
+        - "{{ item }}"
+      provider: "{{ connection }}"
+    with_items: "{{FWACL.stdout_lines}}"
+
+
+#  - name: Pushing the new object and deny statement created using JinjaAndYAML
+#    asa_config:
+#      lines:
+#        - service tcp destination eq 80
+#      parents: 
+#      - object-group service DenyObjectAnsible_1
+#      provider: "{{ connection }}"
+ 
+
+
+#  - name: Setting up OSPF Passive Interfaces
+#    ios_config:
+#      lines: 
+#      - passive-interface {{item[0]}}
+#      parents:
+#      - router ospf 1
+#      provider: "{{ connection }}"
+#    when:
+#      - item[1].passiveinterface is defined 
+#      - item[1].passiveinterface == True 
+#    with_items:
+#      - "{{nodes[inventory_hostname].links.items()}}"
+    

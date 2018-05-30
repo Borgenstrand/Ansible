@@ -1,0 +1,39 @@
+username admin secret cisco123
+{% for VLANs in VLAN.keys() %}
+vlan {{VLAN[VLANs].VLANID}}
+description {{VLAN[VLANs].VLANDescription}}
+{% if VLAN[VLANs].RSPAN == True%}
+remote-span
+{% endif %}
+{% endfor %}   
+
+
+{% for node in nodes.keys() %}
+{% if inventory_hostname == node %}
+{% for link in nodes[node].links.keys() %}
+interface {{link}}
+{% if nodes[node].links[link].Type == "trunk" %}
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 999
+switchport trunk allowed vlan {{nodes[node].links[link].VLAN}}
+description {{nodes[node].links[link].Description}}
+{% endif%}
+{% if nodes[node].links[link].Type == "access" %}
+switchport mode access
+switchport nonegotiate
+switchport access vlan {{nodes[node].links[link].VLAN}}
+switchport voice vlan {{nodes[node].links[link].VoiceVLAN}}
+description {{nodes[node].links[link].Description}}
+{% if nodes[node].links[link].PortSec==True%}
+switchport port-security violation {{nodes[node].links[link].PortSecViolation}}
+switchport port-security maximum {{nodes[node].links[link].PortSecMaximum}}
+switchport port-security {{nodes[node].links[link].PortSecDevice}}
+switchport port-security
+{% endif%}
+{% endif%}
+  
+{% endfor %}
+{% endif %}
+{% endfor %}   

@@ -1,0 +1,219 @@
+1 Switch try 1 SW1:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+
+TASK [Generate VLAN configuration for each device] *****************************
+ok: [SW1]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW1]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=1    unreachable=0    failed=0   
+
+
+real	0m7.752s
+user	0m4.196s
+sys	0m0.510s
+
+
+1 Switch try 2 SW1:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW1]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW1]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m8.162s
+user	0m4.350s
+sys	0m0.561s
+
+
+1 Switch try 3 SW1:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW1]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW1]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m7.945s
+user	0m4.265s
+sys	0m0.543s
+
+---------------------------------------------------------------------------
+
+1 Switch try 1 SW2:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW2]
+
+PLAY RECAP *********************************************************************
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m7.678s
+user	0m4.245s
+sys	0m0.516s
+
+
+1 Switch try 2 SW2:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW2]
+
+PLAY RECAP *********************************************************************
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m6.679s
+user	0m4.157s
+sys	0m0.496s
+
+1 Switch try 3 SW2:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW2]
+
+PLAY RECAP *********************************************************************
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m6.649s
+user	0m4.127s
+sys	0m0.509s
+
+---------------------------------------------------------------------------
+
+2 Switches 1 Try:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW1]
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW2]
+changed: [SW1]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=2    unreachable=0    failed=0   
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m7.854s
+user	0m7.028s
+sys	0m0.878s
+
+
+2 Switches 2 Try:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW1]
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW1]
+changed: [SW2]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=2    unreachable=0    failed=0   
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m6.714s
+user	0m6.704s
+sys	0m0.832s
+
+
+2 Switches 3 Try:
+markus@Borgen-kali:~/Desktop/AnsibleProject/AnsibleVLAN$ time ansible-playbook AddingVLAN.yml 
+
+PLAY [Switches] ****************************************************************
+
+TASK [Define connection] *******************************************************
+ok: [SW1]
+ok: [SW2]
+
+TASK [Generate VLAN configuration for each device] *****************************
+changed: [SW1]
+changed: [SW2]
+
+TASK [Pushing the configs created using JinjaAndYAML] **************************
+changed: [SW1]
+changed: [SW2]
+
+PLAY RECAP *********************************************************************
+SW1                        : ok=3    changed=2    unreachable=0    failed=0   
+SW2                        : ok=3    changed=2    unreachable=0    failed=0   
+
+
+real	0m7.834s
+user	0m6.684s
+sys	0m0.810s
+

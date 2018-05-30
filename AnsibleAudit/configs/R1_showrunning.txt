@@ -1,0 +1,120 @@
+Building configuration...
+
+Current configuration : 1427 bytes
+!
+! Last configuration change at 09:25:48 UTC Wed May 2 2018
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$ByiX$NBrdOQxg8MuZayC2kIklv.
+!
+aaa new-model
+!
+!
+aaa authentication login default local enable
+aaa authentication login CONSOLE none
+!
+!
+!
+!
+!
+aaa session-id common
+ip cef
+!
+!
+!
+!
+!
+!
+ip domain name AnsibleLab
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+username admin secret 5 $1$wyBg$LQ.m.P7vtS2SX0KSB.l6Q/
+!
+!
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+!
+interface FastEthernet0/0
+ ip address 192.168.101.11 255.255.255.0
+ duplex full
+!
+interface Serial1/0
+ ip address 10.1.0.1 255.255.255.0
+ serial restart-delay 0
+!
+interface Serial1/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial1/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial1/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router bgp 10
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ network 10.1.0.0 mask 255.255.255.0
+ network 192.168.101.0
+ neighbor 10.1.0.3 remote-as 100
+ neighbor 192.168.101.12 remote-as 10
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ login authentication CONSOLE
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+!
+!
+end
